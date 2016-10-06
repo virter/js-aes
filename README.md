@@ -1,1 +1,1 @@
-Realization of AES on javascript
+The implementation of AES in JavaScript
