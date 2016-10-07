@@ -118,13 +118,13 @@ function word(a) {
 function Rcon(a) {
     if (Number.isInteger(a) && a > 0) {
         if (a != 1) {
-			var r = new byte(2);
+            var r = new byte(2);
             for (var i = 0; i < a - 2; i++) {
                 r = r.multByte(new byte(2));
             }
         } else {
-			var r = new byte(1);
-		}
+            var r = new byte(1);
+        }
         return new word([r, new byte(0), new byte(0), new byte(0)]);
     } else {
         console.log("Error Rcon:", a);
@@ -133,7 +133,7 @@ function Rcon(a) {
 }
 
 function key(a) {
-	this.e = 0;
+    this.e = 0;
     if (a.constructor.name == "Array" && (a.length == 16 || a.length == 24 || a.length == 32) && a.every(function(i) { return i.constructor.name == "byte"; })) {
         this.b = a;
         this.w = [];
@@ -586,26 +586,3 @@ function xor(a) {
         return 0;
     }
 }
-
-/*var k1 = new key([new byte(0x00),new byte(0x01),new byte(0x02),new byte(0x03),new byte(0x04),new byte(0x05),new byte(0x06),new byte(0x07),new byte(0x08),new byte(0x09),new byte(0x0a),new byte(0x0b),new byte(0x0c),new byte(0x0d),new byte(0x0e),new byte(0x0f)]);
-var rk1 = k1.keyExpansionT();
-var s1 = new state({b: [new byte(0x00),new byte(0x11),new byte(0x22),new byte(0x33),new byte(0x44),new byte(0x55),new byte(0x66),new byte(0x77),new byte(0x88),new byte(0x99),new byte(0xaa),new byte(0xbb),new byte(0xcc),new byte(0xdd),new byte(0xee),new byte(0xff)]});
-var shs1 = s1.Cipher(rk1);
-var shs2 = s1.CipherT(rk1);
-
-console.log(shs1.getHex());
-console.log(shs2.getHex());
-console.log(shs1,shs2);
-console.log(shs1.InvCipher(rk1).getHex());
-console.log(shs2.InvCipher(rk1).getHex());
-
-console.log(shs1.InvCipherT(rk1).getHex());
-console.log(shs2.InvCipherT(rk1).getHex());
-
-console.log(shs1.EqInvCipher(rk1).getHex());
-console.log(shs2.EqInvCipher(rk1).getHex());
-
-console.log(shs1.EqInvCipherT(rk1).getHex());
-console.log(shs2.EqInvCipherT(rk1).getHex());
-
-console.log(s1.getHex());*/
