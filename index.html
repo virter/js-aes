@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>AES</title>
+   <meta charset="utf-8">
+   <link rel="stylesheet" href="style.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+   <script src="aes.js"></script>
+   <script src="main.js"></script>
+ </head>
+ <body>
+   <div class="in">
+     <div class="in-row">
+       <div class="in-cell right">PLAINTEXT</div>
+       <div class="in-cell">
+         <input type="text" class="text">
+       </div>
+       <div class="in-cell">
+         <input type="button" class="text-enc" value="Encrypt">
+       </div>
+     </div>
+     <div class="in-row">
+       <div class="in-cell right">KEY</div>
+       <div class="in-cell">
+         <input type="text" class="key">
+       </div>
+       <div class="in-cell"></div>
+     </div>
+     <div class="in-row">
+       <div class="in-cell right">CIPHER</div>
+       <div class="in-cell">
+         <input type="text" class="cipher">
+       </div>
+       <div class="in-cell">
+         <input type="button" class="cip-dec" value="Decrypt">
+       </div>
+     </div>
+     <div class="in-row">
+       <div class="in-cell right">INVERSE CIPHER</div>
+       <div class="in-cell">
+         <input type="text" class="inv_cipher">
+       </div>
+       <div class="in-cell"></div>
+     </div>
+     <div class="in-row">
+       <div class="in-cell right">EQUIVALENT INVERSE CIPHER</div>
+       <div class="in-cell">
+         <input type="text" class="eq_inv_cipher">
+       </div>
+       <div class="in-cell"></div>
+     </div>
+   </div>
+   <div class="error"></div>
+   <p><a href="http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf" target="_blank">ADVANCED ENCRYPTION STANDARD (AES)</a></p>
+   <h2>Examples from FIPS-197</h2>
+   <h3>AES-128 (Nk=4, Nr=10)</h3>
+   <div class="ex">
+     <div class="ex-row">
+       <div class="ex-cell right">PLAINTEXT</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">KEY</div>
+       <div class="ex-cell">000102030405060708090a0b0c0d0e0f</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">CIPHER (ENCRYPT)</div>
+       <div class="ex-cell">69c4e0d86a7b0430d8cdb78070b4c55a</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">INVERSE CIPHER (DECRYPT)</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">EQUIVALENT INVERSE CIPHER (DECRYPT)</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+   </div>
+
+   <h3>AES-192 (Nk=6, Nr=12)</h3>
+   <div class="ex">
+     <div class="ex-row">
+       <div class="ex-cell right">PLAINTEXT</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">KEY</div>
+       <div class="ex-cell">000102030405060708090a0b0c0d0e0f1011121314151617</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">CIPHER (ENCRYPT)</div>
+       <div class="ex-cell">dda97ca4864cdfe06eaf70a0ec0d7191</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">INVERSE CIPHER (DECRYPT)</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">EQUIVALENT INVERSE CIPHER (DECRYPT)</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+   </div>
+
+   <h3>AES-256 (Nk=8, Nr=14)</h3>
+   <div class="ex">
+     <div class="ex-row">
+       <div class="ex-cell right">PLAINTEXT</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">KEY</div>
+       <div class="ex-cell">000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">CIPHER (ENCRYPT)</div>
+       <div class="ex-cell">8ea2b7ca516745bfeafc49904b496089</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">INVERSE CIPHER (DECRYPT)</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+     <div class="ex-row">
+       <div class="ex-cell right">EQUIVALENT INVERSE CIPHER (DECRYPT)</div>
+       <div class="ex-cell">00112233445566778899aabbccddeeff</div>
+     </div>
+   </div>
+ </body> 
+</html>

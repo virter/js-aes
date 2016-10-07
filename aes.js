@@ -19,7 +19,7 @@ function getStringByte(a) {
 }
 
 function byte(a) {
-    this.info = function() {}
+    this.e = 0;
     if (Number.isInteger(a) && a > -1 && a < 256) {
         this.v = a;
     } else {
@@ -51,6 +51,7 @@ function byte(a) {
             return new byte(t);
         } else {
             console.log("Error multByte:", a);
+            this.e = 1;
             return 0;
         }
     }
@@ -75,7 +76,7 @@ function byte(a) {
 }
 
 function word(a) {
-    this.info = function() {}
+    this.e = 0;
     if (a.constructor.name == "Array" && a.length == 4 && a.every(function(i) { return i.constructor.name == "byte"; })) {
         this.b = a;
     } else {
@@ -101,6 +102,7 @@ function word(a) {
             return new word([this.b[0].multByteT(a.b[0]),this.b[1].multByteT(a.b[1]),this.b[2].multByteT(a.b[2]),this.b[3].multByteT(a.b[3])]);
         } else {
             console.log("Error multWordT:", a);
+            this.e = 1;
             return 0;
         }
     }
@@ -114,11 +116,15 @@ function word(a) {
 }
 
 function Rcon(a) {
-    if (Number.isInteger(a) && a > -1) {
-        var r = new byte(2);
-        for (var i = 0; i < a; i++) {
-            r = r.multByte(new byte(2));
-        }
+    if (Number.isInteger(a) && a > 0) {
+        if (a != 1) {
+			var r = new byte(2);
+            for (var i = 0; i < a - 2; i++) {
+                r = r.multByte(new byte(2));
+            }
+        } else {
+			var r = new byte(1);
+		}
         return new word([r, new byte(0), new byte(0), new byte(0)]);
     } else {
         console.log("Error Rcon:", a);
@@ -127,7 +133,7 @@ function Rcon(a) {
 }
 
 function key(a) {
-    this.info = function() {}
+	this.e = 0;
     if (a.constructor.name == "Array" && (a.length == 16 || a.length == 24 || a.length == 32) && a.every(function(i) { return i.constructor.name == "byte"; })) {
         this.b = a;
         this.w = [];
@@ -142,6 +148,7 @@ function key(a) {
         }
     } else {
         console.log("Error key:", a);
+        this.e = 1;
         return 0;
     }
     this.Nk = this.w.length;
@@ -158,7 +165,7 @@ function key(a) {
         while (i < this.Nb * (this.Nr + 1)) {
             var t = r[i-1];
             if (i % this.Nk == 0) {
-                t = xor([t.RotWord().SubWord(), Rcon((i/this.Nk)-1)]);
+                t = xor([t.RotWord().SubWord(), Rcon((i/this.Nk))]);
             } else if (this.Nk > 6 && i % this.Nk == 4) {
                 t = t.SubWord();
             }
@@ -213,7 +220,7 @@ function key(a) {
 }
 
 function state(a) {
-    this.info = function() {}
+    this.e = 0;
     if (a.hasOwnProperty("b") && a.b.constructor.name == "Array" && a.b.length == 16 && a.b.every(function(i) { return i.constructor.name == "byte"; })) {
         this.b = a.b;
         this.w = [
@@ -258,6 +265,7 @@ function state(a) {
         ];
     } else {
         console.log("Error state:", a);
+        this.e = 1;
         return 0;
     }
     this.SubBytes = function() {
@@ -466,7 +474,6 @@ function state(a) {
             }
             t = t.InvSubBytes().InvShiftRows();
             var r = trks.rk[0].AddRoundKey(t);
-            delete trks
             return r;
         } else {
             console.log("Error EqInvCipher:", a);
@@ -487,7 +494,6 @@ function state(a) {
             }
             t = t.InvSubBytes().InvShiftRows();
             var r = trks.rk[0].AddRoundKey(t);
-            delete trks
             return r;
         } else {
             console.log("Error EqInvCipherT:", a);
@@ -507,12 +513,13 @@ function state(a) {
 }
 
 function rkey(a) {
-    this.info = function() {}
+    this.e = 0;
     if (a.constructor.name == "Array" && a.length == 4 && a.every(function(i) { return i.constructor.name == "word"; })) {
         this.w = [a[0], a[1], a[2], a[3]];
     } else {
         console.log("Error rkey:", a);
-        console.log("");
+        this.e = 1;
+        return 0;
     }
     this.AddRoundKey = function(a) {
         if (a.constructor.name == "state") {
@@ -534,7 +541,7 @@ function rkey(a) {
 }
 
 function rkeys(a) {
-    this.info = function() {}
+    this.e = 0;
     if (a.constructor.name == "Array" && (a.length == 11 || a.length == 13 || a.length == 15) && a.every(function(i) { return i.constructor.name == "rkey"; })) {
         this.rk = [];
         for (var i = 0; i < a.length; i++) {
@@ -542,6 +549,7 @@ function rkeys(a) {
         }
     } else {
         console.log("Error rkeys:", a);
+        this.e = 1;
         return 0;
     }
     this.getrkey = function(a) {
@@ -578,51 +586,8 @@ function xor(a) {
         return 0;
     }
 }
-/*
-var k1 = new key([new byte(0x00),new byte(0x01),new byte(0x02),new byte(0x03),new byte(0x04),new byte(0x05),new byte(0x06),new byte(0x07),new byte(0x08),new byte(0x09),new byte(0x0a),new byte(0x0b),new byte(0x0c),new byte(0x0d),new byte(0x0e),new byte(0x0f)]);
-var rk1 = k1.keyExpansion();
-var s1 = new state({b: [new byte(0x00),new byte(0x11),new byte(0x22),new byte(0x33),new byte(0x44),new byte(0x55),new byte(0x66),new byte(0x77),new byte(0x88),new byte(0x99),new byte(0xaa),new byte(0xbb),new byte(0xcc),new byte(0xdd),new byte(0xee),new byte(0xff)]});
 
-var a = new Date();
-for (var i = 0; i < 10000; i++) {
-    s1.Cipher(rk1);
-}
-console.log(new Date() - a);
-a = new Date();
-for (var i = 0; i < 10000; i++) {
-    s1.CipherT(rk1);
-}
-console.log(new Date() - a);
-
-var k2 = new key([new byte(0x00),new byte(0x01),new byte(0x02),new byte(0x03),new byte(0x04),new byte(0x05),new byte(0x06),new byte(0x07),new byte(0x08),new byte(0x09),new byte(0x0a),new byte(0x0b),new byte(0x0c),new byte(0x0d),new byte(0x0e),new byte(0x0f),new byte(0x10),new byte(0x11),new byte(0x12),new byte(0x13),new byte(0x14),new byte(0x15),new byte(0x16),new byte(0x17)]);
-var rk2 = k2.keyExpansion();
-
-a = new Date();
-for (var i = 0; i < 10000; i++) {
-    s1.Cipher(rk2);
-}
-console.log(new Date() - a);
-a = new Date();
-for (var i = 0; i < 10000; i++) {
-    s1.CipherT(rk2);
-}
-console.log(new Date() - a);
-
-var k3 = new key([new byte(0x00),new byte(0x01),new byte(0x02),new byte(0x03),new byte(0x04),new byte(0x05),new byte(0x06),new byte(0x07),new byte(0x08),new byte(0x09),new byte(0x0a),new byte(0x0b),new byte(0x0c),new byte(0x0d),new byte(0x0e),new byte(0x0f),new byte(0x10),new byte(0x11),new byte(0x12),new byte(0x13),new byte(0x14),new byte(0x15),new byte(0x16),new byte(0x17),new byte(0x18),new byte(0x19),new byte(0x1a),new byte(0x1b),new byte(0x1c),new byte(0x1d),new byte(0x1e),new byte(0x1f)]);
-var rk3 = k3.keyExpansion();
-
-a = new Date();
-for (var i = 0; i < 10000; i++) {
-    s1.Cipher(rk3);
-}
-console.log(new Date() - a);
-a = new Date();
-for (var i = 0; i < 10000; i++) {
-    s1.CipherT(rk3);
-}
-console.log(new Date() - a);
-*/
-var k1 = new key([new byte(0x00),new byte(0x01),new byte(0x02),new byte(0x03),new byte(0x04),new byte(0x05),new byte(0x06),new byte(0x07),new byte(0x08),new byte(0x09),new byte(0x0a),new byte(0x0b),new byte(0x0c),new byte(0x0d),new byte(0x0e),new byte(0x0f)]);
+/*var k1 = new key([new byte(0x00),new byte(0x01),new byte(0x02),new byte(0x03),new byte(0x04),new byte(0x05),new byte(0x06),new byte(0x07),new byte(0x08),new byte(0x09),new byte(0x0a),new byte(0x0b),new byte(0x0c),new byte(0x0d),new byte(0x0e),new byte(0x0f)]);
 var rk1 = k1.keyExpansionT();
 var s1 = new state({b: [new byte(0x00),new byte(0x11),new byte(0x22),new byte(0x33),new byte(0x44),new byte(0x55),new byte(0x66),new byte(0x77),new byte(0x88),new byte(0x99),new byte(0xaa),new byte(0xbb),new byte(0xcc),new byte(0xdd),new byte(0xee),new byte(0xff)]});
 var shs1 = s1.Cipher(rk1);
@@ -643,5 +608,4 @@ console.log(shs2.EqInvCipher(rk1).getHex());
 console.log(shs1.EqInvCipherT(rk1).getHex());
 console.log(shs2.EqInvCipherT(rk1).getHex());
 
-console.log(s1.getHex());
-
+console.log(s1.getHex());*/

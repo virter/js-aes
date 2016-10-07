@@ -1,0 +1,54 @@
+.ex {
+  display: table;
+  border: 1px solid;
+}
+
+.ex-row {
+  display: table-row;
+}
+
+.ex-cell {
+  display: table-cell;
+  font-family: Courier;
+  vertical-align: middle;
+  padding: 10px;
+  border: 1px solid;
+}
+
+.ex-cell.right {
+  text-align: right;
+  width: 200px;
+}
+
+.in {
+  position: relative;
+  display: table;
+}
+
+.in-row {
+  display: table-row;
+}
+
+.in-cell {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.in-cell input[type=text] {
+  width: 500px;
+}
+
+.in-cell.right {
+  display: table-cell;
+  width: 200px;
+  text-align: right;
+}
+
+.error {
+  color: red;
+  font-size: 20px;
+  font-weight: 700px;
+  margin-top: 20px;
+  margin-bottom: 80px;
+}
