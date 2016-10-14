@@ -16,11 +16,8 @@ $(document).ready(function() {
         if (s.e == 1) $('.error').append("Wrong text<br>");
         if (k.e == 1) $('.error').append("Wrong key");
         if (s.e == 0 && k.e == 0) {
-            console.log(k.getHex());
-            console.log(s.getHex());
             var rk = k.keyExpansionT();
             var cs = s.CipherT(rk);
-            console.log(cs.getHex());
             $('.cipher').val(cs.getHex());
         }
     });
